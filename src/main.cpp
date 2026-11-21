@@ -151,6 +151,11 @@ class $modify(BetterSOL, SongOptionsLayer) {
 		float maxDuration = 676.7f; // placeholder
 		bool validDuration = false;
 
+		bool seekPushd = false;
+		float pendingSeek = 0.0f;
+		float seekTimerr = 0.0f;
+		float debugTimer = 0.0f;
+
 		void updateSongDuration() {
 			log::debug("we ballin?");
 			if (HookedCSL::instance) {
@@ -259,6 +264,8 @@ class $modify(BetterSOL, SongOptionsLayer) {
 			}
 		}
 
+		this->schedule(schedule_selector(BetterSOL::updateSeek));
+
 		return true;
 	}
 
@@ -271,5 +278,32 @@ class $modify(BetterSOL, SongOptionsLayer) {
 
 		float seconds = std::round(fields->slidey->getValue() * fields->maxDuration * 10.0f) / 10.0f;
 		fields->text->setString(fmt::format("{:.1f}", seconds).c_str());
+
+		fields->pendingSeek = seconds;
+		fields->seekPushd = true;
+	}
+
+	void updateSeek(float dt) {
+		auto fields = m_fields.self();
+
+		if (!fields->seekPushd) {
+			return;
+		}
+
+		fields->seekTimerr += dt;
+		if (fields->seekTimerr < 1.0f / 30.0f) {
+			return;
+		}
+
+		fields->seekTimerr = 0.0f;
+		fields->seekPushd = false;
+
+		constexpr int MSUIC_ID = 0;
+
+		auto ej = FMODAudioEngine::sharedEngine();
+
+		if (ej->isMusicPlaying(MSUIC_ID)) {
+			ej->setMusicTimeMS(static_cast<unsigned int>(fields->pendingSeek * 1000.0f), true, MSUIC_ID);
+		}
 	}
 };
