@@ -1,3 +1,3 @@
-# TODO GIVE NAME
+# Song Offset Slider
 
-Edit about.md to change this
+This mod adds a slider to the song options menu to make setting the song offset slightly easier, or something.

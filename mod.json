@@ -6,12 +6,18 @@
 		"mac": "2.2091",
 		"ios": "2.2091"
 	},
-	"id": "halved.todo-give-name",
-	"name": "TODO GIVE NAME",
+	"id": "halved.bettersol",
+	"name": "Song Offset Slider",
 	"version": "v1.0.0",
 	"developer": "Halved",
-	"description": "soggy mod v2",
+	"description": "Adds a slider to the song options",
 	"dependencies": {
 		"geode.node-ids": ">=v1.23.3"
-	}
+	},
+	"tags": [
+		"editor",
+		"enhancement",
+		"utility",
+		"offline"
+	]
 }
